@@ -1,16 +1,21 @@
 package uk.co.epii.bennevis.gpx;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import uk.me.jstott.jcoord.LatLng;
+import uk.me.jstott.jcoord.OSRef;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 /**
  * User: James Robinson
@@ -40,14 +45,26 @@ public class GPXLoader {
       });
 
       document = db.parse(inputStream);
+      document.getDocumentElement().normalize();
     }
     catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  public Point2D.Float[] getPoints() {
-    return null;
+  public OSRef[] getPoints() {
+    NodeList nodeList = document.getElementsByTagName("rtept");
+    ArrayList<OSRef> points = new ArrayList<OSRef>();
+    for (int i = 0; i < nodeList.getLength(); i++) {
+      Node node = nodeList.item(i);
+      NamedNodeMap attributes = node.getAttributes();
+      LatLng latLng = new LatLng(
+              Double.parseDouble(attributes.getNamedItem("lat").getTextContent()),
+              Double.parseDouble(attributes.getNamedItem("lon").getTextContent())
+      );
+      points.add(latLng.toOSRef());
+    }
+    return points.toArray(new OSRef[points.size()]);
   }
 
 }
