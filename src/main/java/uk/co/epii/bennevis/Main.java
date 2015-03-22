@@ -1,4 +1,4 @@
-package uk.co.epii.georgecanning;
+package uk.co.epii.bennevis;
 
 public class Main {
 
