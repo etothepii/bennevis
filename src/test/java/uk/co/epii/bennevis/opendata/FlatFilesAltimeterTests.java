@@ -26,6 +26,7 @@ public class FlatFilesAltimeterTests {
     for (int i = 0; i < expected.length; i++) {
       double result = altimeter.getAltitude(osrefs[i]);
       assertEquals("Point[" + i + "] altitude", result, expected[i], 0.00001);
+      System.out.println(osrefs[i].getEasting() + "," + osrefs[i].getNorthing() + "," + result);
     }
   }
 
