@@ -12,41 +12,48 @@ import java.io.FilenameFilter;
  */
 public class AltitudeLocation implements FilenameFilter {
 
-  private String largeSquare;
-  private String smallSquare;
-  private int row;
-  private int col;
+  private final String largeSquare;
+  private final String smallSquare;
+  private final int row;
+  private final int col;
+  private final int northing;
+  private final int easting;
+
+  public AltitudeLocation(String largeSquare, String smallSquare, int row, int col, int northing, int easting) {
+    this.largeSquare = largeSquare;
+    this.smallSquare = smallSquare;
+    this.row = row;
+    this.col = col;
+    this.northing = northing;
+    this.easting = easting;
+  }
 
   public String getLargeSquare() {
     return largeSquare;
-  }
-
-  public void setLargeSquare(String largeSquare) {
-    this.largeSquare = largeSquare;
   }
 
   public String getSmallSquare() {
     return smallSquare;
   }
 
-  public void setSmallSquare(String smallSquare) {
-    this.smallSquare = smallSquare;
-  }
-
   public int getRow() {
     return row;
-  }
-
-  public void setRow(int row) {
-    this.row = row;
   }
 
   public int getCol() {
     return col;
   }
 
-  public void setCol(int col) {
-    this.col = col;
+  public int getNorthing() {
+    return northing;
+  }
+
+  public int getEasting() {
+    return easting;
+  }
+
+  public OSRef toOSRef() {
+    return new OSRef(easting, northing);
   }
 
   public static AltitudeLocation fromOSRef(OSRef osRef) {
@@ -62,12 +69,7 @@ public class AltitudeLocation implements FilenameFilter {
     String smallSquare = sixFig[2] + "" + sixFig[5];
     int row = 199 - ((int)(rounded.getNorthing() / 50) % 200);
     int column = (int)(rounded.getEasting() / 50) % 200;
-    AltitudeLocation altitudeLocation = new AltitudeLocation();
-    altitudeLocation.setCol(column);
-    altitudeLocation.setRow(row);
-    altitudeLocation.setLargeSquare(bigSquare);
-    altitudeLocation.setSmallSquare(smallSquare);
-    return altitudeLocation;
+    return new AltitudeLocation(bigSquare, smallSquare, row, column, roundedNorthing, roundedEasting);
   }
 
   @Override
