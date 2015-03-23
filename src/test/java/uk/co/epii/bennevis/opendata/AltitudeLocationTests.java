@@ -4,6 +4,8 @@ import org.junit.Test;
 import uk.me.jstott.jcoord.OSRef;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: James Robinson
@@ -19,6 +21,13 @@ public class AltitudeLocationTests {
     assertEquals("SmallSquare", "05", result.getSmallSquare());
     assertEquals("Row", 188, result.getRow());
     assertEquals("Column", 70, result.getCol());
+  }
+
+  @Test
+  public void canIdentifyAValidZipFile() {
+    AltitudeLocation result = AltitudeLocation.fromOSRef(new OSRef(203498d, 150549d));
+    assertTrue(result.accept(null, "ss05_OST50GRID_20130610.zip"));
+    assertFalse(result.accept(null, "ss09_OST50GRID_20130610.zip"));
   }
 
 }
