@@ -25,7 +25,7 @@ public class FlatFilesAltimeterTests {
     assertEquals("size of array", expected.length, osrefs.length);
     for (int i = 0; i < expected.length; i++) {
       double result = altimeter.getAltitude(osrefs[i]);
-      assertEquals("Point[" + i + "] altitude", result, expected[i], 0.00001);
+      assertEquals("Point[" + i + "] altitude", expected[i], result, 0.00001);
     }
   }
 

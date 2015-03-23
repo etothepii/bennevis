@@ -1,7 +1,9 @@
 package uk.co.epii.bennevis.gpx;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import uk.co.epii.bennevis.TestData;
+import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.OSRef;
 
 import java.io.IOException;
@@ -26,6 +28,20 @@ public class GPXLoaderTests {
       assertEquals("Point[" + i + "] easting", result[i].getEasting(), expected[i].getEasting(), 0.00001);
       assertEquals("Point[" + i + "] northing", result[i].getNorthing(), expected[i].getNorthing(), 0.00001);
     }
+  }
+
+  @Test
+  @Ignore
+  public void testSwitchingBetweenLongLatAndOS() {
+    double longitude = -3.838392;
+    double latitude = 51.230681;
+    double northing = 149550;
+    double easting = 271739;
+    LatLng latLng = new LatLng(latitude, longitude);
+    latLng.toOSGB36();
+    OSRef osref = latLng.toOSRef();
+    assertEquals("Northing", northing, osref.getNorthing(), 1);
+    assertEquals("Easting", easting, osref.getEasting(), 1);
   }
 
   public static OSRef[] loadPointsFromCSVData(String file) {

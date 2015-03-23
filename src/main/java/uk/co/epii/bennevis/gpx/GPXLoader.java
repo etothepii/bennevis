@@ -62,6 +62,7 @@ public class GPXLoader {
               Double.parseDouble(attributes.getNamedItem("lat").getTextContent()),
               Double.parseDouble(attributes.getNamedItem("lon").getTextContent())
       );
+      latLng.toOSGB36();
       points.add(latLng.toOSRef());
     }
     return points.toArray(new OSRef[points.size()]);

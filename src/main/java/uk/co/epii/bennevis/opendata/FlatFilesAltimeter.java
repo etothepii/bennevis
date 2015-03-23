@@ -15,7 +15,7 @@ public class FlatFilesAltimeter implements IAltimeter {
 
   public FlatFilesAltimeter() {
     this.terrain50 = new Terrain50FlatFileImpl();
-    this.interpolator = new FlatLineInterpolator();
+    this.interpolator = new WeightedMaxDistanceInterpolator();
   }
 
   public FlatFilesAltimeter(Terrain50 terrain50, Interpolator interpolator) {
