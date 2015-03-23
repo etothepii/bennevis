@@ -50,9 +50,13 @@ public class AltitudeLocation implements FilenameFilter {
   }
 
   public static AltitudeLocation fromOSRef(OSRef osRef) {
-    OSRef rounded = new OSRef(
-            50 * (int)(Math.round(osRef.getEasting() / 50)),
-            50 * (int)(Math.round(osRef.getNorthing() / 50)));
+    return fromRoundedOSRef(
+            50 * (int) (Math.round(osRef.getEasting() / 50)),
+            50 * (int) (Math.round(osRef.getNorthing() / 50)));
+  }
+    
+  private static AltitudeLocation fromRoundedOSRef(int roundedEasting, int roundedNorthing) {
+    OSRef rounded = new OSRef(roundedEasting, roundedNorthing);
     char[] sixFig = rounded.toSixFigureString().toCharArray();
     String bigSquare = sixFig[0] + "" + sixFig[1];
     String smallSquare = sixFig[2] + "" + sixFig[5];
@@ -71,5 +75,16 @@ public class AltitudeLocation implements FilenameFilter {
     String upper = name.toUpperCase();
     String testFor = largeSquare.toUpperCase() + getSmallSquare();
     return upper.startsWith(testFor) && upper.endsWith(".ZIP");
+  }
+
+  public static AltitudeLocation[] cornersFromOSRef(OSRef osRef) {
+    int northing = (int)osRef.getNorthing();
+    int easting = (int)osRef.getEasting();
+    return new AltitudeLocation[] {
+            fromRoundedOSRef(50 * (easting / 50), 50 * (northing / 50)),
+            fromRoundedOSRef(50 * (easting / 50 + 1), 50 * (northing / 50)),
+            fromRoundedOSRef(50 * (easting / 50), 50 * (northing / 50 + 1)),
+            fromRoundedOSRef(50 * (easting / 50 + 1), 50 * (northing / 50 + 1))
+    };
   }
 }

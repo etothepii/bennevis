@@ -24,6 +24,24 @@ public class AltitudeLocationTests {
   }
 
   @Test
+  public void canCreateAltitudeCorners() {
+    AltitudeLocation[] result = AltitudeLocation.cornersFromOSRef(new OSRef(203498d, 150549d));
+    AltitudeLocation[] expected = new AltitudeLocation[] {
+            AltitudeLocation.fromOSRef(new OSRef(203450d, 150500d)),
+            AltitudeLocation.fromOSRef(new OSRef(203500d, 150500d)),
+            AltitudeLocation.fromOSRef(new OSRef(203450d, 150550d)),
+            AltitudeLocation.fromOSRef(new OSRef(203500d, 150550d))
+    };
+    assertEquals("Number of corners", 4, result.length);
+    for (int i = 0; i < 4; i++) {
+      assertEquals("corner[" + i + "] largeSquare", expected[i].getLargeSquare(), result[i].getLargeSquare());
+      assertEquals("corner[" + i + "] smallSquare", expected[i].getSmallSquare(), result[i].getSmallSquare());
+      assertEquals("corner[" + i + "] row", expected[i].getRow(), result[i].getRow());
+      assertEquals("corner[" + i + "] column", expected[i].getCol(), result[i].getCol());
+    }
+  }
+
+  @Test
   public void canIdentifyAValidZipFile() {
     AltitudeLocation result = AltitudeLocation.fromOSRef(new OSRef(203498d, 150549d));
     assertTrue(result.accept(null, "ss05_OST50GRID_20130610.zip"));
