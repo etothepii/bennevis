@@ -14,9 +14,9 @@ public class AltitudeLocationTests {
 
   @Test
   public void canCreateAltitude() {
-    AltitudeLocation result = AltitudeLocation.fromOSRef(new OSRef(250549d, 103498d));
+    AltitudeLocation result = AltitudeLocation.fromOSRef(new OSRef(203498d, 150549d));
     assertEquals("LargeSquare", "SS", result.getLargeSquare());
-    assertEquals("SmallSquare", "50", result.getSmallSquare());
+    assertEquals("SmallSquare", "05", result.getSmallSquare());
     assertEquals("Row", 188, result.getRow());
     assertEquals("Column", 70, result.getCol());
   }
