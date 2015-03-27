@@ -12,13 +12,13 @@ import static org.junit.Assert.assertEquals;
  * Date: 23/03/2015
  * Time: 00:02
  */
-public class FlatFilesAltimeterTests {
+public class ContourAltimeterTests {
 
   @Test
   public void canCalculateAltitudes() {
-    IAltimeter altimeter = new FlatFilesAltimeter();
+    IAltimeter altimeter = new ContourAltimeter();
     OSRef[] osrefs = GPXLoaderTests.loadPointsFromCSVData("ExampleWalk.csv");
-    double[] expected = AltitudeLoader.loadAltitudesFromCSVData("ExampleWalkAltitude.csv");
+    double[] expected = AltitudeLoader.loadAltitudesFromCSVData("ExampleWalkContourAltitude.csv");
     assertEquals("size of array", expected.length, osrefs.length);
     for (int i = 0; i < expected.length; i++) {
       double result = altimeter.getAltitude(osrefs[i]);

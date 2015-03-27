@@ -17,7 +17,7 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
   }
 
   @Override
-  protected double getAltitude(File possibleZip, AltitudeLocation altitudeLocation) {
+  protected double getAltitude(File zip, AltitudeLocation altitudeLocation) {
     return 0;
   }
 }
