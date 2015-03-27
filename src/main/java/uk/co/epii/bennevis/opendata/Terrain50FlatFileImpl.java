@@ -14,7 +14,7 @@ import java.util.Map;
  * Date: 23/03/2015
  * Time: 12:05
  */
-public class Terrain50FlatFileImpl implements Terrain50 {
+public class Terrain50FlatFileImpl extends AbstractTerrain50 {
 
   private static final Logger LOG = LoggerFactory.getLogger(Terrain50FlatFileImpl.class);
 
@@ -23,17 +23,19 @@ public class Terrain50FlatFileImpl implements Terrain50 {
   private String rootDataFolder = "/Users/jrrpl/Downloads/terr50_gagg_gb/data/";
 
   @Override
-  public double getAltitude(AltitudeLocation altitudeLocation) {
-    File file = new File(rootDataFolder + altitudeLocation.getLargeSquare());
-    File[] possibleZips = file.listFiles(altitudeLocation);
-    if (possibleZips.length > 1) {
-      LOG.warn("More files found than expected defualting to first");
+  protected String getRootDataFolder() {
+    return rootDataFolder;
+  }
+
+  public double getAltitude(File zip, AltitudeLocation altitudeLocation) {
+    int row = 0; int col = 0;
+    if (altitudeLocation instanceof AltitudePointLocation) {
+      AltitudePointLocation altitudePointLocation = (AltitudePointLocation)altitudeLocation;
+      row = altitudePointLocation.getRow();
+      col = altitudePointLocation.getCol();
     }
-    if (possibleZips.length == 0) {
-      LOG.warn("No file found");
-      return 0;
-    }
-    return getAltitude(possibleZips[0], altitudeLocation.getRow(), altitudeLocation.getCol());
+    return getAltitude(zip, row, col);
+
   }
 
   private double getAltitude(File zip, int row, int col) {

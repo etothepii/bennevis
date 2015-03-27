@@ -17,7 +17,7 @@ public class DummyTerrain50 implements Terrain50 {
   }
 
   @Override
-  public double getAltitude(AltitudeLocation altitudeLocation) {
+  public double getAltitude(AltitudePointLocation altitudeLocation) {
     Double height = heights.get(new Point(altitudeLocation.getEasting(), altitudeLocation.getNorthing()));
     if (height == null) {
       return 0;

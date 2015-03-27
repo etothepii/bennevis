@@ -25,7 +25,7 @@ public class FlatFilesAltimeter implements IAltimeter {
 
   @Override
   public double getAltitude(OSRef osref) {
-    AltitudeLocation[] altitudeLocation = AltitudeLocation.cornersFromOSRef(osref);
+    AltitudePointLocation[] altitudeLocation = AltitudePointLocation.cornersFromOSRef(osref);
     double topLeft = terrain50.getAltitude(altitudeLocation[0]);
     double topRight = terrain50.getAltitude(altitudeLocation[1]);
     double bottomLeft = terrain50.getAltitude(altitudeLocation[2]);
