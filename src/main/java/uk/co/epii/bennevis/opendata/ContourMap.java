@@ -16,5 +16,6 @@ public interface ContourMap {
   public Collection<Point> getPointSet(double height);
   public Collection<Double> getKnownContours();
   public Collection<Double> getKnownHeights(double min, double max);
+  public GeometryDetail getSandwichingContour(GeometryDetail contour, Point point);
 
 }

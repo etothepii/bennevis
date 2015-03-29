@@ -1,19 +1,16 @@
 package uk.co.epii.bennevis.opendata;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.operation.distance.DistanceOp;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import uk.co.epii.bennevis.IAltimeter;
+import uk.co.epii.spencerperceval.tuple.Duple;
 import uk.me.jstott.jcoord.OSRef;
 
 import java.io.IOException;
 import java.util.*;
-
-;
 
 /**
  * User: James Robinson
@@ -116,14 +113,18 @@ public class SmallSquareContour implements IAltimeter, ContourMap {
 
   @Override
   public Collection<Double> getKnownHeights(double min, double max) {
+    return getValuesBetween(knownPoints, min, max);
+  }
+
+  private Collection<Double> getValuesBetween(List<Double> values, double min, double max) {
     if (max < min) {
-        return getKnownHeights(max, min);
+      return getKnownHeights(max, min);
     }
-    int startIndex = Collections.binarySearch(knownPoints, min);
+    int startIndex = Collections.binarySearch(values, min);
     if (startIndex < 0) {
       startIndex = ~startIndex;
     }
-    int stopIndex = Collections.binarySearch(knownPoints, min);
+    int stopIndex = Collections.binarySearch(values, max);
     if (stopIndex < 0) {
       stopIndex = ~stopIndex;
     }
@@ -132,8 +133,45 @@ public class SmallSquareContour implements IAltimeter, ContourMap {
     }
     ArrayList<Double> knownHeights = new ArrayList<Double>(stopIndex - startIndex);
     for (int i = startIndex; i < stopIndex; i++) {
-      knownHeights.add(knownPoints.get(i));
+      knownHeights.add(values.get(i));
     }
     return knownHeights;
+  }
+
+  @Override
+  public GeometryDetail getSandwichingContour(GeometryDetail contour, Point point) {
+    GeometryDetail sandwich = null;
+    List<Duple<Double, Geometry>> candidates = new ArrayList<Duple<Double, Geometry>>();
+    for (Double height : getValuesBetween(knownContours, contour.getHeight() - 10.5, contour.getHeight() + 10.5)) {
+      for (MultiLineString candidate : getContourSet(height)) {
+        candidates.add(new Duple<Double, Geometry>(height, candidate));
+      }
+    }
+    for (Double height : getValuesBetween(knownPoints, contour.getHeight() - 10.5, contour.getHeight() + 10.5)) {
+      for (Point candidate : getPointSet(height)) {
+        candidates.add(new Duple<Double, Geometry>(height, candidate));
+      }
+    }
+    for (Duple<Double, Geometry> duple : candidates) {
+      double height = duple.getFirst();
+      Geometry candidate = duple.getSecond();
+      if (candidate == contour.getContour()) {
+        continue;
+      }
+      if (sandwich == null || candidate.isWithinDistance(point, sandwich.getDistance())) {
+        if (sandwiches(candidate, contour, point)) {
+          sandwich = GeometryDetail.getContourDetail(point, candidate, height);
+        }
+      }
+    }
+    return sandwich;
+  }
+
+  private boolean sandwiches(Geometry candidate, GeometryDetail contour, Point point) {
+    DistanceOp toCandidate = new DistanceOp(candidate, point);
+    Coordinate[] coordinates = toCandidate.nearestPoints();
+    LineSegment lineSegment = new LineSegment(coordinates[0], coordinates[1]);
+    Geometry lineSegmentGeometry = lineSegment.toGeometry(geometryFactory);
+    return !contour.getContour().crosses(lineSegmentGeometry);
   }
 }

@@ -1,6 +1,5 @@
 package uk.co.epii.bennevis.opendata;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.co.epii.bennevis.IAltimeter;
 import uk.co.epii.bennevis.gpx.GPXLoaderTests;

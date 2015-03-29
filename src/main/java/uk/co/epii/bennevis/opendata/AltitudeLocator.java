@@ -13,12 +13,8 @@ import java.util.Collection;
 public class AltitudeLocator {
 
   private final ContourMap contourMap;
-  private Double closestContourHeight = null;
-  private Double secondClosestContourHeight = null;
-  private MultiLineString closestContour = null;
-  private Double closestContourDistance = null;
-  private Double secondClosestContourDistance = null;
-  private MultiLineString secondClosestContour = null;
+  private GeometryDetail closest = null;
+  private GeometryDetail sandwich = null;
   private Point point;
 
   public AltitudeLocator(ContourMap contourMap) {
@@ -30,24 +26,33 @@ public class AltitudeLocator {
     for (Double height : contourMap.getKnownContours()) {
       processContourSet(height, contourMap.getContourSet(height));
     }
-    for (Double height : contourMap.getKnownHeights(closestContourHeight, secondClosestContourHeight)) {
-      for (Point knownPoint : contourMap.getPointSet(height)) {
-        if (point.isWithinDistance(knownPoint, closestContourDistance)) {
-          secondClosestContourDistance = closestContourDistance;
-          secondClosestContourHeight = closestContourHeight;
-          closestContourHeight = height;
-          closestContourDistance = point.distance(knownPoint);
-        }
-        else if (point.isWithinDistance(knownPoint, secondClosestContourDistance)) {
-          secondClosestContourHeight = height;
-          secondClosestContourDistance = point.distance(knownPoint);
-        }
+    for (Double height : contourMap.getKnownHeights(closest.getHeight() - 10d, closest.getHeight() + 10)) {
+      processPointSet(height, contourMap.getPointSet(height));
+    }
+    sandwich = contourMap.getSandwichingContour(closest, point);
+    if (sandwich == null) {
+      return closest.getHeight();
+    }
+    double totalDistance = closest.getDistance() + sandwich.getDistance();
+    double closestWeight = sandwich.getDistance() / totalDistance;
+    double sandwichWeight = closest.getDistance() / totalDistance;
+    return closest.getHeight() * closestWeight + sandwich.getHeight() * sandwichWeight;
+  }
+
+  private void processPointSet(double height, Collection<Point> pointSet) {
+    for (Point point : pointSet) {
+      if (point.isWithinDistance(this.point, closest.getDistance())) {
+        closest = GeometryDetail.getContourDetail(this.point, point, height);
       }
     }
-    double totalDistance = closestContourDistance + secondClosestContourDistance;
-    double weightOfClosestDistance = secondClosestContourDistance / totalDistance;
-    double weightOfSecondClosestDistance = closestContourDistance / totalDistance;
-    return weightOfClosestDistance * closestContourHeight + weightOfSecondClosestDistance * secondClosestContourHeight;
+  }
+
+  public GeometryDetail getClosest() {
+    return closest;
+  }
+
+  public GeometryDetail getSandwich() {
+    return sandwich;
   }
 
   private boolean processContourSet(double height, Collection<MultiLineString> contourSet) {
@@ -59,21 +64,8 @@ public class AltitudeLocator {
   }
 
   private boolean processContour(double height, MultiLineString contour) {
-    if (closestContourHeight == null || contour.isWithinDistance(point, closestContourDistance)) {
-      if (closestContourHeight == null || closestContourHeight != height) {
-        secondClosestContourHeight = closestContourHeight;
-        secondClosestContour = closestContour;
-        secondClosestContourDistance = closestContourDistance;
-        closestContourHeight = height;
-      }
-      closestContourDistance = contour.distance(point);
-      closestContour = contour;
-      return true;
-    }
-    if (secondClosestContourHeight == null || contour.isWithinDistance(point, secondClosestContourDistance)) {
-      secondClosestContourHeight = height;
-      secondClosestContourDistance = contour.distance(point);
-      secondClosestContour = contour;
+    if (closest == null || contour.isWithinDistance(point, closest.getDistance())) {
+      closest = GeometryDetail.getContourDetail(point, contour, height);
       return true;
     }
     return false;
@@ -81,9 +73,10 @@ public class AltitudeLocator {
 
   public void reset(Point point) {
     this.point = point;
-    closestContourHeight = null;
-    secondClosestContourHeight = null;
-    closestContourDistance = null;
-    secondClosestContourDistance = null;
+    closest = null;
+  }
+
+  public Point getPoint() {
+    return point;
   }
 }
