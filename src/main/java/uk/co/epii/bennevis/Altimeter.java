@@ -7,7 +7,7 @@ import uk.me.jstott.jcoord.OSRef;
  * Date: 22/03/2015
  * Time: 23:54
  */
-public interface IAltimeter {
+public interface Altimeter {
 
   public double getAltitude(OSRef osref);
 

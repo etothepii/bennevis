@@ -4,7 +4,7 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.epii.bennevis.IAltimeter;
+import uk.co.epii.bennevis.Altimeter;
 import uk.co.epii.conservatives.robertwalpole.DataSet;
 
 import java.io.File;
@@ -21,19 +21,16 @@ import java.util.Map;
 public class Terrain50ContourImpl extends AbstractTerrain50 {
 
   private static final Logger LOG = LoggerFactory.getLogger(Terrain50FlatFileImpl.class);
-  private final Map<File, IAltimeter> altimeters = new HashMap<File, IAltimeter>();
-
-  private String rootDataFolder = "/Users/jrrpl/Downloads/terr50_cesh_gb/data/";
-  private String tempLocation = "/tmp/Terrain50/";
+  private final Map<File, Altimeter> altimeters = new HashMap<File, Altimeter>();
 
   @Override
   protected String getRootDataFolder() {
-    return rootDataFolder;
+    return DataProperties.CONTOUR_FOLDER;
   }
 
   @Override
   protected double getAltitude(File zip, AltitudeLocation altitudeLocation) {
-    IAltimeter altimeter = altimeters.get(zip);
+    Altimeter altimeter = altimeters.get(zip);
     if (altimeter == null) {
       DataSet[] dataSets = loadZip(zip, altitudeLocation);
       if (dataSets == null) {
@@ -52,7 +49,7 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
         FileHeader fileHeader = (FileHeader)fileHeaderObj;
         String fileName = fileHeader.getFileName().toUpperCase();
         InputStream inputStream = zipFile.getInputStream(fileHeader);
-        FileOutputStream fileOutputStream = new FileOutputStream(tempLocation + fileName);
+        FileOutputStream fileOutputStream = new FileOutputStream(DataProperties.TEMP_LOCATION + fileName);
         byte[] bytes = new byte[4096];
         int bytesRead;
         while ((bytesRead = inputStream.read(bytes)) != -1) {
@@ -61,11 +58,11 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
       }
       DataSet[] dataSets = new DataSet[] {
               DataSet.createFromFile(new File(
-                      tempLocation +
+                      DataProperties.TEMP_LOCATION +
                               altitudeLocation.getLargeSquare() +
                               altitudeLocation.getSmallSquare() + "_line.shp")),
               DataSet.createFromFile(new File(
-                      tempLocation +
+                      DataProperties.TEMP_LOCATION +
                               altitudeLocation.getLargeSquare() +
                               altitudeLocation.getSmallSquare() + "_point.shp"))
       };

@@ -25,7 +25,7 @@ public class Main {
     }
     GPXLoader gpxLoader = new GPXLoader();
     gpxLoader.loadFile(is);
-    IAltimeter altimeter = new ContourAltimeter();
+    Altimeter altimeter = new ContourAltimeter();
     OSRef previous = null;
     double distance = 0;
     PrintWriter pw = new PrintWriter(out);

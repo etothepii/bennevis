@@ -1,6 +1,6 @@
 package uk.co.epii.bennevis.opendata;
 
-import uk.co.epii.bennevis.IAltimeter;
+import uk.co.epii.bennevis.Altimeter;
 import uk.me.jstott.jcoord.OSRef;
 
 /**
@@ -8,7 +8,7 @@ import uk.me.jstott.jcoord.OSRef;
  * Date: 22/03/2015
  * Time: 23:59
  */
-public class FlatFilesAltimeter implements IAltimeter {
+public class FlatFilesAltimeter implements Altimeter {
 
   private Interpolator interpolator;
   private Terrain50 terrain50;
