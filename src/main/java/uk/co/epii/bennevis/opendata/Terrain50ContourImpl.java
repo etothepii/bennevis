@@ -4,7 +4,7 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.epii.bennevis.IAltimeter;
+import uk.co.epii.bennevis.Altimeter;
 import uk.co.epii.conservatives.robertwalpole.DataSet;
 
 import java.io.File;
@@ -21,10 +21,10 @@ import java.util.Map;
 public class Terrain50ContourImpl extends AbstractTerrain50 {
 
   private static final Logger LOG = LoggerFactory.getLogger(Terrain50FlatFileImpl.class);
-  private final Map<File, IAltimeter> altimeters = new HashMap<File, IAltimeter>();
+  private final Map<File, Altimeter> altimeters = new HashMap<File, Altimeter>();
 
-  private String rootDataFolder = "/Users/jrrpl/Downloads/terr50_cesh_gb/data/";
-  private String tempLocation = "/tmp/Terrain50/";
+  private String rootDataFolder = System.getProperty("ContourFolder");
+  private String tempLocation = System.getProperty("TempFolder");
 
   @Override
   protected String getRootDataFolder() {
@@ -33,7 +33,7 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
 
   @Override
   protected double getAltitude(File zip, AltitudeLocation altitudeLocation) {
-    IAltimeter altimeter = altimeters.get(zip);
+    Altimeter altimeter = altimeters.get(zip);
     if (altimeter == null) {
       DataSet[] dataSets = loadZip(zip, altitudeLocation);
       if (dataSets == null) {

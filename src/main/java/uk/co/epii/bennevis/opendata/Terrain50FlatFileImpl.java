@@ -20,7 +20,7 @@ public class Terrain50FlatFileImpl extends AbstractTerrain50 {
 
   private final Map<File, double[][]> loadedFiles = new HashMap<File, double[][]>();
 
-  private String rootDataFolder = "/Users/jrrpl/Downloads/terr50_gagg_gb/data/";
+  private String rootDataFolder = System.getProperty("PointsFolder");
 
   @Override
   protected String getRootDataFolder() {

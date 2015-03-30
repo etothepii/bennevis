@@ -5,7 +5,7 @@ import com.vividsolutions.jts.operation.distance.DistanceOp;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
-import uk.co.epii.bennevis.IAltimeter;
+import uk.co.epii.bennevis.Altimeter;
 import uk.co.epii.spencerperceval.tuple.Duple;
 import uk.me.jstott.jcoord.OSRef;
 
@@ -17,7 +17,7 @@ import java.util.*;
  * Date: 27/03/2015
  * Time: 22:27
  */
-public class SmallSquareContour implements IAltimeter, ContourMap {
+public class SmallSquareContour implements Altimeter, ContourMap {
 
   private static GeometryFactory geometryFactory = new GeometryFactory();
 

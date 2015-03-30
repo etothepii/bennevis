@@ -1,7 +1,7 @@
 package uk.co.epii.bennevis.opendata;
 
 import org.junit.Test;
-import uk.co.epii.bennevis.IAltimeter;
+import uk.co.epii.bennevis.Altimeter;
 import uk.co.epii.bennevis.gpx.GPXLoaderTests;
 import uk.me.jstott.jcoord.OSRef;
 
@@ -16,7 +16,7 @@ public class ContourAltimeterTests {
 
   @Test
   public void canCalculateAltitudes() {
-    IAltimeter altimeter = new ContourAltimeter();
+    Altimeter altimeter = new ContourAltimeter();
     OSRef[] osrefs = GPXLoaderTests.loadPointsFromCSVData("ExampleWalk.csv");
     double[] expected = AltitudeLoader.loadAltitudesFromCSVData("ExampleWalkContourAltitude.csv");
     assertEquals("size of array", expected.length, osrefs.length);
