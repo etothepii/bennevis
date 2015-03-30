@@ -66,8 +66,9 @@ public class SmallSquareContour implements IAltimeter, ContourMap {
     SmallSquareContour smallSquareContour = new SmallSquareContour();
     HashSet<Double> knownContours = new HashSet<Double>();
     HashSet<Double> knownPoints = new HashSet<Double>();
+    SimpleFeatureIterator collection = null;
     try {
-      SimpleFeatureIterator collection = contours.getFeatures().features();
+      collection = contours.getFeatures().features();
       while (collection.hasNext()) {
         SimpleFeature simpleFeature = collection.next();
         MultiLineString multiLineString = (MultiLineString) simpleFeature.getAttribute("the_geom");
@@ -75,6 +76,7 @@ public class SmallSquareContour implements IAltimeter, ContourMap {
         smallSquareContour.getContourSet(height).add(multiLineString);
         knownContours.add(height);
       }
+      collection.close();
       collection = points.getFeatures().features();
       while (collection.hasNext()) {
         SimpleFeature simpleFeature = collection.next();
@@ -91,6 +93,11 @@ public class SmallSquareContour implements IAltimeter, ContourMap {
       }
     } catch (IOException e) {
       return null;
+    }
+    finally {
+      if (collection != null) {
+        collection.close();
+      }
     }
     smallSquareContour.knownContours.addAll(knownContours);
     Collections.sort(smallSquareContour.knownContours);
