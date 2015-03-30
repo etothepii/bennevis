@@ -23,12 +23,9 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
   private static final Logger LOG = LoggerFactory.getLogger(Terrain50FlatFileImpl.class);
   private final Map<File, Altimeter> altimeters = new HashMap<File, Altimeter>();
 
-  private String rootDataFolder = System.getProperty("ContourFolder");
-  private String tempLocation = System.getProperty("TempFolder");
-
   @Override
   protected String getRootDataFolder() {
-    return rootDataFolder;
+    return DataProperties.CONTOUR_FOLDER;
   }
 
   @Override
@@ -52,7 +49,7 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
         FileHeader fileHeader = (FileHeader)fileHeaderObj;
         String fileName = fileHeader.getFileName().toUpperCase();
         InputStream inputStream = zipFile.getInputStream(fileHeader);
-        FileOutputStream fileOutputStream = new FileOutputStream(tempLocation + fileName);
+        FileOutputStream fileOutputStream = new FileOutputStream(DataProperties.TEMP_LOCATION + fileName);
         byte[] bytes = new byte[4096];
         int bytesRead;
         while ((bytesRead = inputStream.read(bytes)) != -1) {
@@ -61,11 +58,11 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
       }
       DataSet[] dataSets = new DataSet[] {
               DataSet.createFromFile(new File(
-                      tempLocation +
+                      DataProperties.TEMP_LOCATION +
                               altitudeLocation.getLargeSquare() +
                               altitudeLocation.getSmallSquare() + "_line.shp")),
               DataSet.createFromFile(new File(
-                      tempLocation +
+                      DataProperties.TEMP_LOCATION +
                               altitudeLocation.getLargeSquare() +
                               altitudeLocation.getSmallSquare() + "_point.shp"))
       };

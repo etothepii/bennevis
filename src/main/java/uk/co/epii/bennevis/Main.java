@@ -8,28 +8,7 @@ import java.io.*;
 
 public class Main {
 
-  public static void loadProperties() {
-    InputStream is = null;
-    try {
-      is = Main.class.getResourceAsStream("/data.properties");
-      System.getProperties().load(is);
-    }
-    catch (IOException ioe) {
-      throw new RuntimeException(ioe);
-    }
-    finally {
-      if (is != null) {
-        try {
-          is.close();
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-      }
-    }
-  }
-
   public static void main(String[] args) throws FileNotFoundException {
-    loadProperties();
     InputStream is = null;
     OutputStream out = null;
     if (args.length == 0) {
