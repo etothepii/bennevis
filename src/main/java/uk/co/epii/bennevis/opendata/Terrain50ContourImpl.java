@@ -50,7 +50,9 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
         FileHeader fileHeader = (FileHeader)fileHeaderObj;
         String fileName = fileHeader.getFileName().toUpperCase();
         InputStream inputStream = zipFile.getInputStream(fileHeader);
-        FileOutputStream fileOutputStream = new FileOutputStream(DataProperties.TEMP_LOCATION + fileName);
+        String outfile = DataProperties.TEMP_LOCATION + fileName;
+        LOG.debug("Trying to write out to: " + outfile);
+        FileOutputStream fileOutputStream = new FileOutputStream(outfile);
         byte[] bytes = new byte[4096];
         int bytesRead;
         while ((bytesRead = inputStream.read(bytes)) != -1) {
@@ -70,7 +72,7 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
       return dataSets;
     }
     catch (Exception e) {
-      LOG.warn("An Exception has occured loading data from the zip file", e);
+      LOG.warn("An Exception has occured loading data from the zip file: " + e.getMessage(), e);
     }
     return null;
   }
