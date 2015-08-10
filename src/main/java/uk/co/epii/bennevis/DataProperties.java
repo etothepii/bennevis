@@ -1,4 +1,4 @@
-package uk.co.epii.bennevis.opendata;
+package uk.co.epii.bennevis;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +17,7 @@ public class DataProperties {
   public static String CONTOUR_FOLDER = System.getProperty("ContourFolder");
   public static String TEMP_LOCATION = System.getProperty("TempFolder");
   public static String POINTS_FOLDER = System.getProperty("PointsFolder");
+  public static int PORT = Integer.parseInt(System.getProperty("Port"));
 
   public static void loadProperties() {
     InputStream is = null;
