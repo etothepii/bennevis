@@ -1,14 +1,36 @@
 package uk.co.epii.bennevis;
 
+import com.sun.net.httpserver.HttpServer;
 import uk.co.epii.bennevis.gpx.GPXLoader;
 import uk.co.epii.bennevis.opendata.ContourAltimeter;
 import uk.me.jstott.jcoord.OSRef;
 
 import java.io.*;
+import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 public class Main {
 
-  public static void main(String[] args) throws FileNotFoundException {
+  public static void main(String[] args) throws Exception {
+    if (args.length == 1 && args[0].toUpperCase().equals("SERVER")) {
+      runServer(args);
+    }
+    else {
+      runLocally(args);
+    }
+  }
+
+  private static void runServer(String[] args) throws IOException {
+    InetSocketAddress addr = new InetSocketAddress(DataProperties.PORT);
+    HttpServer server = HttpServer.create(addr, 0);
+
+    server.createContext("/", new DefaultHttpHandlerImpl());
+    server.setExecutor(Executors.newCachedThreadPool());
+    server.start();
+    System.out.println("Server is listening on port " + DataProperties.PORT);
+  }
+
+  public static void runLocally(String[] args) throws FileNotFoundException {
     InputStream is = null;
     OutputStream out = null;
     if (args.length == 0) {

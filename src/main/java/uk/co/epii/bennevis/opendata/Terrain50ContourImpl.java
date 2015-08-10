@@ -5,6 +5,7 @@ import net.lingala.zip4j.model.FileHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.co.epii.bennevis.Altimeter;
+import uk.co.epii.bennevis.DataProperties;
 import uk.co.epii.conservatives.robertwalpole.DataSet;
 
 import java.io.File;

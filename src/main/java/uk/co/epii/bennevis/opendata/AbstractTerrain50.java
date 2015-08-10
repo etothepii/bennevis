@@ -18,6 +18,7 @@ public abstract class AbstractTerrain50 implements Terrain50 {
   @Override
   public double getAltitude(AltitudeLocation altitudeLocation) {
     File file = new File(getRootDataFolder() + altitudeLocation.getLargeSquare());
+    LOG.debug("Seeking files at: " + file);
     File[] possibleZips = file.listFiles(altitudeLocation);
     if (possibleZips.length > 1) {
       LOG.warn("More files found than expected defualting to first");

@@ -4,6 +4,7 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.epii.bennevis.DataProperties;
 
 import java.io.*;
 import java.util.HashMap;

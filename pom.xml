@@ -22,8 +22,8 @@
     <geotools.version>10-beta</geotools.version>
     <robertWalpole.version>0.0.2</robertWalpole.version>
     <maven.compiler.version>2.3.2</maven.compiler.version>
-    <java.source.version>1.6</java.source.version>
-    <java.target.version>1.6</java.target.version>
+    <java.source.version>1.7</java.source.version>
+    <java.target.version>1.7</java.target.version>
     <maven.resources.plugin.version>2.5</maven.resources.plugin.version>
     <maven.surefire.plugin.version>2.9</maven.surefire.plugin.version>
     <maven.jar.plugin.version>2.4</maven.jar.plugin.version>
