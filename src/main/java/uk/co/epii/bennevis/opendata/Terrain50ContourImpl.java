@@ -24,6 +24,14 @@ public class Terrain50ContourImpl extends AbstractTerrain50 {
   private static final Logger LOG = LoggerFactory.getLogger(Terrain50FlatFileImpl.class);
   private final Map<File, Altimeter> altimeters = new HashMap<File, Altimeter>();
 
+  public Terrain50ContourImpl() {
+    super();
+    File tempLocation = new File(DataProperties.TEMP_LOCATION);
+    if (!tempLocation.exists()) {
+      tempLocation.mkdirs();
+    }
+  }
+
   @Override
   protected String getRootDataFolder() {
     return DataProperties.CONTOUR_FOLDER;
