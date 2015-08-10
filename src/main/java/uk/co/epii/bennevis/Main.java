@@ -1,6 +1,7 @@
 package uk.co.epii.bennevis;
 
 import com.sun.net.httpserver.HttpServer;
+import uk.co.epii.bennevis.encoder.JSONEncoder;
 import uk.co.epii.bennevis.gpx.GPXLoader;
 import uk.co.epii.bennevis.opendata.ContourAltimeter;
 import uk.me.jstott.jcoord.OSRef;
@@ -23,7 +24,6 @@ public class Main {
   private static void runServer(String[] args) throws IOException {
     InetSocketAddress addr = new InetSocketAddress(DataProperties.PORT);
     HttpServer server = HttpServer.create(addr, 0);
-
     server.createContext("/", new DefaultHttpHandlerImpl());
     server.setExecutor(Executors.newCachedThreadPool());
     server.start();
@@ -48,21 +48,8 @@ public class Main {
     GPXLoader gpxLoader = new GPXLoader();
     gpxLoader.loadFile(is);
     Altimeter altimeter = new ContourAltimeter();
-    OSRef previous = null;
-    double distance = 0;
     PrintWriter pw = new PrintWriter(out);
-    for (OSRef osRef : gpxLoader.getPoints()) {
-      pw.print(osRef.getEasting());
-      pw.print(",");
-      pw.print(osRef.getNorthing());
-      pw.print(",");
-      distance += distance(previous, osRef);
-      pw.print(distance / 1609.344);
-      pw.print(",");
-      pw.print(altimeter.getAltitude(osRef));
-      pw.println();
-      previous = osRef;
-    }
+    pw.print(new JSONEncoder().encode(gpxLoader.getPoints(), altimeter));
     pw.flush();
     pw.close();
   }
