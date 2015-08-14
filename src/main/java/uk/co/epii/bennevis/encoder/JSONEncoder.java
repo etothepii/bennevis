@@ -10,9 +10,11 @@ import uk.me.jstott.jcoord.OSRef;
  */
 public class JSONEncoder {
 
-  public String encode(OSRef[] points, Altimeter altimeter) {
+  public String encode(OSRef[] points, String name, Altimeter altimeter) {
     StringBuilder stringBuilder = new StringBuilder(points.length * 200);
-    stringBuilder.append("{\"name\":\"Route\",\"points\":[");
+    stringBuilder.append("{\"name\":\"");
+    stringBuilder.append(name);
+    stringBuilder.append("\",\"points\":[");
     boolean first = true;
     for (OSRef osRef : points) {
       if (first) {
