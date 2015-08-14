@@ -15,7 +15,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * User: James Robinson
@@ -49,6 +51,16 @@ public class GPXLoader {
     }
     catch (Exception e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public String getName() {
+    NodeList nodeList = document.getElementsByTagName("name");
+    if (nodeList.getLength() == 0) {
+      return "Route" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+    }
+    else {
+      return nodeList.item(0).getTextContent().trim();
     }
   }
 

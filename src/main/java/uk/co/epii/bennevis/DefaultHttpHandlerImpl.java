@@ -37,7 +37,7 @@ public class DefaultHttpHandlerImpl implements HttpHandler {
         responseHeaders.set("Content-Type", "application/json");
         httpExchange.sendResponseHeaders(200, 0);
         outputStream = httpExchange.getResponseBody();
-        outputStream.write(jsonEncoder.encode(gpxLoader.getPoints(), altimeter).getBytes());
+        outputStream.write(jsonEncoder.encode(gpxLoader.getPoints(), gpxLoader.getName(), altimeter).getBytes());
       }
       finally {
         if (outputStream != null) {

@@ -49,7 +49,7 @@ public class Main {
     gpxLoader.loadFile(is);
     Altimeter altimeter = new ContourAltimeter();
     PrintWriter pw = new PrintWriter(out);
-    pw.print(new JSONEncoder().encode(gpxLoader.getPoints(), altimeter));
+    pw.print(new JSONEncoder().encode(gpxLoader.getPoints(), gpxLoader.getName(), altimeter));
     pw.flush();
     pw.close();
   }
