@@ -31,6 +31,22 @@ public class GPXLoaderTest {
   }
 
   @Test
+  public void interpolationOnlyInterpolates() {
+    GPXLoader gpxLoader = new GPXLoader();
+    gpxLoader.loadFile(TestData.load("ExampleWalk.gpx"));
+    OSRef[] result = gpxLoader.getPoints();
+    OSRef[] expected = loadPointsFromCSVData("oldExampleWalk.csv");
+    int vertex = 0;
+    for (int i = 0; vertex < expected.length && i < result.length; i++) {
+      if (Math.abs(result[i].getEasting() - expected[vertex].getEasting()) < 0.01
+              && Math.abs(result[i].getNorthing() - expected[vertex].getNorthing()) < 0.01) {
+        vertex++;
+      }
+    }
+    assertEquals("Vertecies present", expected.length, vertex);
+  }
+
+  @Test
   public void canLoadViewRangerGPXFile() {
     GPXLoader gpxLoader = new GPXLoader();
     gpxLoader.loadFile(TestData.load("ViewRangerWalk.gpx"));
