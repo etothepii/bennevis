@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 22/03/2015
  * Time: 20:03
  */
-public class GPXLoaderTests {
+public class GPXLoaderTest {
 
   @Test
   public void canLoadGPXFile() {
@@ -23,6 +23,20 @@ public class GPXLoaderTests {
     gpxLoader.loadFile(TestData.load("ExampleWalk.gpx"));
     OSRef[] result = gpxLoader.getPoints();
     OSRef[] expected = loadPointsFromCSVData("ExampleWalk.csv");
+    assertEquals("size of array", expected.length, result.length);
+    for (int i = 0; i < result.length; i++) {
+      assertEquals("Point[" + i + "] easting", result[i].getEasting(), expected[i].getEasting(), 0.00001);
+      assertEquals("Point[" + i + "] northing", result[i].getNorthing(), expected[i].getNorthing(), 0.00001);
+    }
+  }
+
+  @Test
+  public void canLoadViewRangerGPXFile() {
+    GPXLoader gpxLoader = new GPXLoader();
+    gpxLoader.loadFile(TestData.load("ViewRangerWalk.gpx"));
+    OSRef[] result = gpxLoader.getPoints();
+    OSRef[] expected = loadPointsFromCSVData("ViewRangerWalk.csv");
+    assertEquals("Pennine Way - Day 07 - Alston to Garrigill", gpxLoader.getName());
     assertEquals("size of array", expected.length, result.length);
     for (int i = 0; i < result.length; i++) {
       assertEquals("Point[" + i + "] easting", result[i].getEasting(), expected[i].getEasting(), 0.00001);

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 28/03/2015
  * Time: 23:16
  */
-public class AltitudeLocatorTests {
+public class AltitudeLocatorTest {
 
   @Test
   public void canFindAltitude1() {
