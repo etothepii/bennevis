@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 23/03/2015
  * Time: 00:28
  */
-public class AltitudeLocationTests {
+public class AltitudeLocationTest {
 
   @Test
   public void canCreateAltitude() {

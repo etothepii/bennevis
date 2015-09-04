@@ -1,9 +1,7 @@
 package uk.co.epii.bennevis.gpx;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.*;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -60,13 +58,21 @@ public class GPXLoader {
       return "Route" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
     }
     else {
-      return nodeList.item(0).getTextContent().trim();
+      Node node = nodeList.item(0);
+      if (node instanceof CharacterData) {
+        CharacterData characterData = (CharacterData)node;
+        return ((CharacterData) node).getData().trim();
+      }
+      else {
+        return node.getTextContent().trim();
+      }
     }
   }
 
   public OSRef[] getPoints() {
     NodeList nodeList = document.getElementsByTagName("rtept");
     ArrayList<OSRef> points = new ArrayList<OSRef>();
+    OSRef prev = null;
     for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
       NamedNodeMap attributes = node.getAttributes();
@@ -75,7 +81,21 @@ public class GPXLoader {
               Double.parseDouble(attributes.getNamedItem("lon").getTextContent())
       );
       latLng.toOSGB36();
-      points.add(latLng.toOSRef());
+      OSRef next = latLng.toOSRef();
+      if (prev != null) {
+        double x = next.getEasting() - prev.getEasting();
+        double y = next.getNorthing() - prev.getNorthing();
+        double d2 = x * x + y * y;
+        if (d2 > 256) {
+          double d = Math.sqrt(d2);
+          int split = (int)Math.ceil(d / 16);
+          for (int j = 1; j < split; j++) {
+            points.add(new OSRef(prev.getEasting() + x * j / split, prev.getNorthing() + y * j / split));
+          }
+        }
+      }
+      points.add(next);
+      prev = next;
     }
     return points.toArray(new OSRef[points.size()]);
   }
