@@ -17,7 +17,7 @@ public class ContourAltimeterTest {
   @Test
   public void canCalculateAltitudes() {
     Altimeter altimeter = new ContourAltimeter();
-    OSRef[] osrefs = GPXLoaderTest.loadPointsFromCSVData("OldExampleWalk.csv");
+    OSRef[] osrefs = GPXLoaderTest.loadPointsFromCSVData("oldExampleWalk.csv");
     double[] expected = AltitudeLoader.loadAltitudesFromCSVData("ExampleWalkContourAltitude.csv");
     assertEquals("size of array", expected.length, osrefs.length);
     for (int i = 0; i < expected.length; i++) {
